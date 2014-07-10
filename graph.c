@@ -74,14 +74,9 @@ int bubble (stmt *src)
  var    *i, *j;                 /* Other loop counting pointers */
 
  if (src == NULL) return 0;
- while (ok && src->prev != top)
+ while (ok && src != top && src->prev != top)
         {
          temp = src->prev;      /* Don't need to check "also"'s because */
-         if (temp == NULL)
-                {
-                 ++ count;
-                 break;
-                }
          shadow = temp->next;   /* They've already "bubbled" passed src */
          for (i = temp->changes; i; i = i->next)           /* Check all the */
                  for (j = src->uses; j; j = j->next) /* variable lists */
@@ -256,9 +251,9 @@ void dumpVHDL (stmt *start)
 
  for (temp = start; temp; temp = temp->spine)
         {                       /* Run down the spine */
-         for (level = temp; level; level = level->also)
+        for (level = temp; level; level = level->also)
                 {
-                 if (level) if (level->type != LOOP && level->text)
+                 if (level) if (level->text)
                         {
                          if (level != top && level != top->next)
                                 {
